@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Factory Simulator</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.4/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="styles.css">
+
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
+  <script src="https://cdn.socket.io/4.7.4/socket.io.min.js" integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4" crossorigin="anonymous"></script>
+  <style>
+    /* Additional custom styles */
+    body { 
+      font-family: "Open Sans", sans-serif;
+    }
+
+    .scenario-tree {
+      max-width: 200px;
+    }
+
+    .scenario-checkbox {
+      margin-right: 8px;
+    }
+
+    .btn {
+      text-align: center;
+      padding: 8px 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      margin-right: 8px;
+    }
+
+    .btn-start {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .btn-pause {
+      background-color: #f1c40f;
+      color: white;
+    }
+
+    .btn-restart {
+      background-color: #e67e22;
+      color: white;
+    }
+
+    .btn-end {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .console {
+      background-color: #ecf0f1;
+      min-height: 150px;
+      padding: 8px;
+      margin-top: 8px;
+    }
+  </style>
+
+
+</head>
+
+<body class="bg-gray-100">
+  <div class="container mx-auto my-4 p-4 bg-white shadow-lg">
+    <div class="flex">
+      <!-- Main content -->
+      <div class="flex-1 p-4">
+      <!-- Form Start -->
+      <!-- <form id="brokerForm" action="/registration" method="post"> -->
+
+        <div class="flex justify-between mb-4">
+          <!-- drop-down selector -->
+          <select id="brokerSelect" class="border p-2">
+            <option value="factory">Factory Broker</option>
+            <option value="customised">Customised Broker</option>
+            <option value="mosquitto">Mosquitto Broker</option>
+          </select>
+          <div>
+          <!-- control button -->            
+            <button class="btn btn-start">Start</button>
+            <button class="btn btn-end">End</button>
+          </div>
+        </div>
+        <div class="flex-1 p-4 flex">
+          <!-- Left part for inputs -->
+          <div class="w-1/2 p-2">
+            <div class="mb-4">
+              <label class="block">Broker Address = <input type="text" name="broker" id="brokerInput" class="border p-2 w-full"></label>
+              <label class="block mt-2">Broker Port = <input type="number" name="port" id="portInput" class="border p-2 w-full"></label>
+              <label class="block">Filename = <input type="text" name="filename" id="fileNameInput" value="factory" class="border p-2 w-full"></label>
+              <label class="block mt-2">Topic = <input type="text" name="topic" id="topicInput" value="factory/#" class="border p-2 w-full"></label>                                             
+            </div>
+          </div>
+          <!-- Right part for console -->
+          <div class="w-1/2 p-2">
+            <div class="console" id="console">
+              Replay Message Show Here
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script>
+    // Script for broker selection interactivity
+      // document.getElementById('brokerForm').addEventListener('submit', function (event) {
+      //   event.preventDefault(); // Block the default submission behaviour of the form
+    
+      //   var formData = new FormData(this);
+      //  // Submit form data using Ajax
+      //   $.ajax({
+      //     type: 'POST',
+      //     url: '/registration', // URL for form submission
+      //     data: formData,
+      //     processData: false,
+      //     contentType: false,
+      //     success: function(response) {
+      //       document.getElementById('console').textContent = 'Simulation started...';
+      //       toggleInputs(true); // Lock input fields
+      //     },
+      //     error: function(xhr, status, error) {
+      //       console.error(error);
+      //     }
+      //   });
+      // });
+    
+      // // Function to disable or enable inputs
+      // function toggleInputs(disabled) {
+      //   document.getElementById('brokerInput').disabled = disabled;
+      //   document.getElementById('portInput').disabled = disabled;
+      //   document.getElementById('fileNameInput').disabled = disabled;
+      //   document.getElementById('topicInput').disabled = disabled;
+      //   document.querySelector('.btn-start').disabled = disabled;// Disable the Start button
+      // }
+    
+      // document.querySelector('.btn-end').addEventListener('click', () => {
+      //   location.reload();// Refresh the page
+      // });
+    
+
+    document.getElementById('brokerSelect').addEventListener('change', function () {
+      var brokerInput = document.getElementById('brokerInput');
+      var portInput = document.getElementById('portInput');
+      var fileNameInput = document.getElementById('fileNameInput');
+      var topicInput = document.getElementById('topicInput');
+
+      switch (this.value) {
+        case 'factory':
+          brokerInput.value = "192.168.0.12";
+          portInput.value = 1883;
+          fileNameInput.value = "factory";
+          topicInput.value = "factory/#";
+          break;
+        case 'mosquitto':
+          brokerInput.value = "test.mosquitto.org";
+          portInput.value = 1883;
+          fileNameInput.value = "factory";
+          topicInput.value = "factory/#";
+          break;
+        case 'customised':
+          brokerInput.value = "";
+          portInput.value = 1883;
+          fileNameInput.value = "factory";
+          topicInput.value = "factory/#";
+          break;
+        default:
+          brokerInput.value = "";
+          portInput.value = 1883;
+          fileNameInput.value = "";
+          topicInput.value = "";
+      }
+    });
+
+    // Script for basic interactivity
+    document.querySelector('.btn-start').addEventListener('click', () => {
+      var brokerInput = document.getElementById('brokerInput').value;
+      var portInput = document.getElementById('portInput').value;
+      var brokerSelected = document.getElementById('brokerSelect').value;
+      var topicInput = document.getElementById('topicInput').value;
+      var filenameInput = document.getElementById('fileNameInput').value;
+      console.log(brokerInput);
+      console.log(portInput);
+      
+      if (brokerInput.trim() != "" && portInput.trim() != "" 
+      && topicInput.trim() != "" && filenameInput.trim() != ""){
+        document.getElementById('console').textContent = 'Simulation started...';
+        state='start_registration';
+        sendStateToBackend(state);
+        sendDataToBackend(brokerSelected, brokerInput, portInput);
+        sendTopicDataToBackend(topicInput);
+        sendFilenameDataToBackend(filenameInput);
+      } else {
+        alert("Veuillez saisir l'adresse broker et le port avant de démarrer la simulation.");
+      }
+
+    });
+
+    document.querySelector('.btn-end').addEventListener('click', () => {
+      document.getElementById('console').textContent = 'Simulation ended.';
+      state='end_registration';
+      sendStateToBackend(state);
+    });
+
+    // Fonction pour envoyer l'état au backend
+    function sendStateToBackend(state) {
+        // Envoyer l'état au backend sur l'endpoint "/state"
+        fetch('/state', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ state: state })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erreur lors de l'envoi de l'état ${state} au backend.`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(`Réponse du backend pour /state (${state}):`, data);
+            // Vous pouvez effectuer des actions supplémentaires avec la réponse du backend si nécessaire
+        })
+        .catch(error => {
+            console.error(`Erreur lors de la communication avec le backend pour /state (${state}):`, error);
+        });
+    }
+
+    // Fonction pour envoyer les données au backend
+    function sendDataToBackend(selectedBroker, broker, port) {
+      // Créer un objet avec les données à envoyer au backend
+      var requestData = {
+          selectedBroker: selectedBroker,
+          broker: broker,
+          port: port
+      };
+
+      // Envoyer les données au backend sur l'endpoint "/broker"
+      fetch('/broker', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Erreur lors de l\'envoi des données au backend.');
+          }
+          return response.json();
+      })
+      .then(data => {
+          console.log('Réponse du backend pour /broker :', data);
+          // Mettre à jour les scénarios après avoir changé le broker
+          
+      })
+      .catch(error => {
+          console.error('Erreur lors de la communication avec le backend pour /broker:', error);
+      });
+    }
+
+    // Fonction pour envoyer les données au backend
+    function sendTopicDataToBackend(topic) {
+      // Créer un objet avec les données à envoyer au backend
+      var requestData = {
+          topic: topic
+      };
+
+      // Envoyer les données au backend sur l'endpoint "/broker"
+      fetch('/topic', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Erreur lors de l\'envoi des données au backend.');
+          }
+          return response.json();
+      })
+      .then(data => {
+          console.log('Réponse du backend pour /topic :', data);
+          // Mettre à jour les scénarios après avoir changé le broker
+          
+      })
+      .catch(error => {
+          console.error('Erreur lors de la communication avec le backend pour /broker:', error);
+      });
+    }
+
+    // Fonction pour envoyer les données au backend
+    function sendFilenameDataToBackend(filename) {
+      // Créer un objet avec les données à envoyer au backend
+      var requestData = {
+          filename: filename
+      };
+
+      // Envoyer les données au backend sur l'endpoint "/broker"
+      fetch('/filename', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Erreur lors de l\'envoi des données au backend.');
+          }
+          return response.json();
+      })
+      .then(data => {
+          console.log('Réponse du backend pour /filename :', data);
+          // Mettre à jour les scénarios après avoir changé le broker
+          
+      })
+      .catch(error => {
+          console.error('Erreur lors de la communication avec le backend pour /broker:', error);
+      });
+    }
+
+    const socket = io.connect('http://127.0.0.1:5000');  // Remplacez le domaine et le port appropriés
+
+    // Écouter l'événement 'message' du serveur
+    socket.on('message', function (data) {
+      // Traiter les données reçues du serveur
+      console.log('Received message:', data);
+
+      // Mettez à jour l'interface utilisateur avec les données reçues
+      updateUI(data);
+    });
+
+    // Fonction pour mettre à jour l'interface utilisateur avec les données reçues
+    function updateUI(data) {
+      // Remplacez cette partie avec votre logique d'affichage des données dans l'interface utilisateur
+      const consoleDiv = document.getElementById('console');
+      const jsonString = JSON.stringify(data.data, null, 2);
+      consoleDiv.innerHTML += `<br>${jsonString}`;
+      // consoleDiv.innerHTML += `<br>{<br>Topic: ${data.data.topic}<br>Payload: ${data.data.payload}<br>receiving_time: ${data.data.receiving_time}}`;
+    }
+
+  </script>
+</body>
+
+</html>

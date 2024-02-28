@@ -1,0 +1,167 @@
+[
+    {
+        "topic": "factory/hbw/box_storage",
+        "payload": "0",
+        "receiving_time": "2023-12-13T17:02:57.484308"
+    },
+    {
+        "topic": "factory/hbw/input_notifier",
+        "payload": "0",
+        "receiving_time": "2023-12-13T17:02:57.540666"
+    },
+    {
+        "topic": "factory/hbw/output_notifier",
+        "payload": "0",
+        "receiving_time": "2023-12-13T17:02:57.546663"
+    },
+    {
+        "topic": "factory/hbw/box_storage",
+        "payload": "new loop",
+        "receiving_time": "2023-12-13T17:03:00.120184"
+    },
+    {
+        "topic": "factory/hbw/box_storage",
+        "payload": "new loop",
+        "receiving_time": "2023-12-13T17:03:00.380555"
+    },
+    {
+        "topic": "factory/hbw/output_notifier",
+        "payload": "available",
+        "receiving_time": "2023-12-13T17:03:29.469634"
+    },
+    {
+        "topic": "factory/hbw/input_notifier",
+        "payload": "",
+        "receiving_time": "2023-12-13T17:04:00.609270"
+    },
+    {
+        "topic": "factory/hbw/output_notifier",
+        "payload": "",
+        "receiving_time": "2023-12-13T17:04:00.660159"
+    },
+    {
+        "topic": "factory/hbw/box_storage",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:04:20.407391"
+    },
+    {
+        "topic": "factory/hbw/box_storage",
+        "payload": "new loop",
+        "receiving_time": "2023-12-13T17:04:21.419891"
+    },
+    {
+        "topic": "factory/hbw/output_notifier",
+        "payload": "available",
+        "receiving_time": "2023-12-13T17:04:52.047796"
+    },
+    {
+        "topic": "factory/hbw/input_notifier",
+        "payload": "",
+        "receiving_time": "2023-12-13T17:05:22.974595"
+    },
+    {
+        "topic": "factory/hbw/output_notifier",
+        "payload": "",
+        "receiving_time": "2023-12-13T17:05:23.029258"
+    },
+    {
+        "topic": "factory/hbw/box_storage",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:05:46.123452"
+    },
+    {
+        "topic": "factory/hbw/box_storage",
+        "payload": "new loop",
+        "receiving_time": "2023-12-13T17:05:47.136685"
+    },
+    {
+        "topic": "factory/hbw/input_notifier",
+        "payload": "available",
+        "receiving_time": "2023-12-13T17:06:14.451931"
+    },
+    {
+        "topic": "factory/hbw/input_notifier",
+        "payload": "",
+        "receiving_time": "2023-12-13T17:06:54.573032"
+    },
+    {
+        "topic": "factory/hbw/output_notifier",
+        "payload": "",
+        "receiving_time": "2023-12-13T17:06:54.618035"
+    },
+    {
+        "topic": "factory/hbw/box_storage",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:07:14.325733"
+    },
+    {
+        "topic": "factory/hbw/box_storage",
+        "payload": "new loop",
+        "receiving_time": "2023-12-13T17:07:15.337704"
+    },
+    {
+        "topic": "factory/hbw/input_notifier",
+        "payload": "available",
+        "receiving_time": "2023-12-13T17:07:45.906737"
+    },
+    {
+        "topic": "factory/hbw/input_notifier",
+        "payload": "",
+        "receiving_time": "2023-12-13T17:08:15.795337"
+    },
+    {
+        "topic": "factory/hbw/output_notifier",
+        "payload": "",
+        "receiving_time": "2023-12-13T17:08:15.842368"
+    },
+    {
+        "topic": "factory/hbw/box_storage",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:08:38.831632"
+    },
+    {
+        "topic": "factory/hbw/box_storage",
+        "payload": "new loop",
+        "receiving_time": "2023-12-13T17:08:39.842634"
+    },
+    {
+        "topic": "factory/hbw/input_notifier",
+        "payload": "available",
+        "receiving_time": "2023-12-13T17:09:07.774397"
+    },
+    {
+        "topic": "factory/hbw/input_notifier",
+        "payload": "",
+        "receiving_time": "2023-12-13T17:09:44.982908"
+    },
+    {
+        "topic": "factory/hbw/output_notifier",
+        "payload": "",
+        "receiving_time": "2023-12-13T17:09:45.037615"
+    },
+    {
+        "topic": "factory/hbw/box_storage",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:10:02.600513"
+    },
+    {
+        "topic": "factory/hbw/box_storage",
+        "payload": "new loop",
+        "receiving_time": "2023-12-13T17:10:03.612582"
+    },
+    {
+        "topic": "factory/hbw/output_notifier",
+        "payload": "available",
+        "receiving_time": "2023-12-13T17:10:38.788203"
+    },
+    {
+        "topic": "factory/hbw/input_notifier",
+        "payload": "",
+        "receiving_time": "2023-12-13T17:11:07.185209"
+    },
+    {
+        "topic": "factory/hbw/output_notifier",
+        "payload": "",
+        "receiving_time": "2023-12-13T17:11:07.244213"
+    }
+]

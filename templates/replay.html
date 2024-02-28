@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Factory Simulator</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.4/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="styles.css">
+
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
+  <style>
+    /* Additional custom styles */
+    body {
+      font-family: "Open Sans", sans-serif;
+    }
+
+    .scenario-tree {
+      max-width: 300px;
+    }
+
+    .scenario-checkbox {
+      margin-right: 8px;
+    }
+
+    .btn {
+      text-align: center;
+      padding: 8px 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      margin-right: 8px;
+    }
+
+    .btn-start {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .btn-pause {
+      background-color: #f1c40f;
+      color: white;
+    }
+
+    .btn-restart {
+      background-color: #e67e22;
+      color: white;
+    }
+
+    .btn-end {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .console {
+      background-color: #ecf0f1;
+      min-height: 150px;
+      padding: 8px;
+      margin-top: 8px;
+    }
+  </style>
+
+
+</head>
+
+<body class="bg-gray-100">
+  <div class="container mx-auto my-4 p-4 bg-white shadow-lg">
+    <div class="flex">
+      <!-- Sidebar -->
+      <div class="flex flex-col w-1/4 p-4 scenario-tree bg-blue-100 border-r">
+        <span class="font-bold">All Scenarios</span>
+        <div id="scenario-container"></div>
+
+        
+      </div>
+      <!-- Main content -->
+      <div class="flex-1 p-4">
+        <div class="flex justify-between mb-4">
+          <select id="brokerSelect" class="border p-2">
+            <option value="mosquitto">Mosquitto Broker</option>
+            <option value="factory">Factory Broker</option>
+            <option value="customised">Customised Broker</option>
+          </select>
+          <div>
+            <button class="btn btn-start">Start</button>
+            <button class="btn btn-pause">Pause</button>
+            <button class="btn btn-restart">Restart</button>
+            <button class="btn btn-end">End</button>
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="block">broker = <input type="text" id="brokerInput" value="'broker.emqx.io'"
+              class="border p-2 w-full"></label>
+          <label class="block mt-2">port = <input type="text" id="portInput" value="1883"
+              class="border p-2 w-full"></label>
+        </div>
+        <div class="console" id="console">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+  <script>
+  var state ;
+  document.querySelector('.btn-start').addEventListener('click', () => {
+    var scenarioContainer = document.getElementById('scenario-container');
+    var selectedScenarios = scenarioContainer.querySelectorAll('.scenario-checkbox:checked');
+    
+    if (state === 'start') {
+    alert("Please click on Restart before making any changes.");
+    // Reset the selected broker to its original value
+    this.value = my_app_instance.selected_broker;
+    return;
+  }
+    if (selectedScenarios.length === 0) {
+      alert("Veuillez sélectionner au moins un scénario avant de démarrer la simulation.");
+    } else {
+      document.getElementById('console').textContent = 'Simulation started...';
+      state='start'
+      sendStateToBackend('start');
+    }
+      
+  });
+  
+  document.querySelector('.btn-pause').addEventListener('click', () => {
+      document.getElementById('console').textContent = 'Simulation paused.';
+      state='pause'
+      sendStateToBackend('pause');
+  });
+  
+  document.querySelector('.btn-restart').addEventListener('click', () => {
+      document.getElementById('console').textContent = 'Simulation restarted.';
+      state='restart'
+      sendStateToBackend('restart');
+  });
+  
+  document.querySelector('.btn-end').addEventListener('click', () => {
+      document.getElementById('console').textContent = '!!!!!!!!!!!!!!!!!!!!!!!Simulation ended !!!!!!!!!!!!!!!!!!!!!!!';
+      state='end'
+      sendStateToBackend('end');
+  });
+
+  async function displayMessages() {
+            try {
+                const response = await fetch('/message', {
+                    method: 'POST',
+                    // Note: No need to set 'Content-Type' for GET requests
+                });
+        
+                if (!response.ok) {
+                    throw new Error(`Error fetching messages. Status: ${response.status}`);
+                }
+        
+                const messages = await response.json();
+                const consoleDiv = document.getElementById('console');
+                consoleDiv.innerHTML = '';
+        
+                // Assuming messages is an array, you can iterate through it
+                messages.forEach((message) => {
+                    const messageElement = document.createElement('div');
+                    messageElement.appendChild(document.createTextNode(message));
+                    consoleDiv.appendChild(messageElement);
+                });
+        
+                // Handle the message data as needed
+                console.log('Received messages:', messages);
+        
+            } catch (error) {
+                console.error('Error:', error);
+                // Handle the error as needed
+            }
+  }
+        
+        
+  // Fonction pour envoyer l'état au backend
+  function sendStateToBackend(state) {
+      // Envoyer l'état au backend sur l'endpoint "/state"
+      fetch('/state', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ state: state })
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error(`Erreur lors de l'envoi de l'état ${state} au backend.`);
+          }
+          return response.json();
+      })
+      .then(data => {
+          console.log(`Réponse du backend pour /state (${state}):`, data);
+          // Vous pouvez effectuer des actions supplémentaires avec la réponse du backend si nécessaire
+      })
+      .catch(error => {
+          console.error(`Erreur lors de la communication avec le backend pour /state (${state}):`, error);
+      });
+  }
+
+
+
+// Fonction pour envoyer les données au backend
+function sendDataToBackend(selectedBroker, broker, port) {
+  // Créer un objet avec les données à envoyer au backend
+  var requestData = {
+      selectedBroker: selectedBroker,
+      broker: broker,
+      port: port
+  };
+
+  // Envoyer les données au backend sur l'endpoint "/broker"
+  fetch('/broker', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Erreur lors de l\'envoi des données au backend.');
+      }
+      return response.json();
+  })
+  .then(data => {
+      console.log('Réponse du backend pour /broker :', data);
+      // Mettre à jour les scénarios après avoir changé le broker
+       
+  })
+  .catch(error => {
+      console.error('Erreur lors de la communication avec le backend pour /broker:', error);
+  });
+}
+
+// Script for broker selection interactivity
+document.getElementById('brokerSelect').addEventListener('change', function () {
+  var brokerInput = document.getElementById('brokerInput');
+  var portInput = document.getElementById('portInput');
+
+  // Récupérer la valeur sélectionnée
+  var selectedBroker = this.value;
+  // Check if the state is 'start'
+  if (state === 'start') {
+    alert("Please click on Restart before making any changes.");
+    // Reset the selected broker to its original value
+    this.value = my_app_instance.selected_broker;
+    return;
+  }
+
+  // Mettre à jour les champs avec les valeurs appropriées
+  switch (selectedBroker) {
+      case 'factory':
+          brokerInput.value = '192.168.0.12';
+          portInput.value = "1883";
+          break;
+      case 'mosquitto':
+          brokerInput.value = 'test.mosquitto.org';
+          portInput.value = "1883";
+          break;
+      case 'customised':
+          brokerInput.value = '';
+          portInput.value = "1883";
+          break;
+      default:
+          brokerInput.value = "";
+          portInput.value = "";
+  }
+
+  // Appeler la fonction pour envoyer les données au backend
+  sendDataToBackend(selectedBroker, brokerInput.value, portInput.value);
+});
+
+
+
+// Modifiez votre fonction updateScenarios() pour ajouter un gestionnaire d'événements
+function updateScenarios() {
+  // Faites une requête AJAX pour obtenir les scénarios depuis le serveur
+  fetch('/scen')
+    .then(response => response.json())
+    .then(data => {
+      // Effacez le contenu actuel
+      var scenarioContainer = document.getElementById('scenario-container');
+      scenarioContainer.innerHTML = "";
+
+      // Ajoutez dynamiquement les cases à cocher pour chaque scénario
+      data.scenarios.forEach(scenario => {
+        var label = document.createElement('label');
+        var checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'scenario-checkbox';
+        checkbox.addEventListener('change', handleScenarioSelection); // Ajoutez cette ligne pour ajouter le gestionnaire d'événements
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(' ' + scenario));
+        label.appendChild(document.createElement('br'));
+        scenarioContainer.appendChild(label);
+      });
+
+      // Appliquez le style jsTree à votre div
+      /*$(scenarioContainer).jstree({
+        'core': {
+          'data': data.scenarios.map(scenario => {
+            return {
+              "text": scenario,
+              "state": { "opened": true },
+              "children": []  // Ajoutez ici les éventuels fichiers pour chaque scénario
+            };
+          })
+        }
+      });*/
+    })
+    .catch(error => {
+      console.error('Erreur lors de la récupération des scénarios:', error);
+    });
+}
+
+
+// Fonction pour gérer la sélection des scénarios
+function handleScenarioSelection() {
+  var scenarioContainer = document.getElementById('scenario-container');
+  var clickedCheckbox = this;
+  
+  // Uncheck other checkboxes
+  scenarioContainer.querySelectorAll('.scenario-checkbox').forEach(function (checkbox) {
+    if (checkbox !== clickedCheckbox) {
+      checkbox.checked = false;
+    }
+  });
+  if (state === 'start') {
+    alert("Please click on Restart before making any changes.");
+    // Reset the selected broker to its original value
+    this.value = my_app_instance.selected_broker;
+    return;
+  }
+
+  var selectedScenario = [];
+
+  // Parcourir les cases à cocher pour trouver les scénarios sélectionnés
+  scenarioContainer.querySelectorAll('.scenario-checkbox:checked').forEach(function (checkbox) {
+    // Trouver le texte du scénario en remontant dans la hiérarchie DOM
+    var scenarioText = checkbox.closest('label').textContent.trim();
+    selectedScenario.push(scenarioText);
+  });
+
+  // Envoyer les scénarios sélectionnés au backend
+  fetch('/selected_scenario', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ selectedScenario: selectedScenario })
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erreur lors de l\'envoi du scénario au backend.');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Réponse du backend pour /selected_scenario :', data);
+    // Vous pouvez effectuer des actions supplémentaires avec la réponse du backend si nécessaire
+  })
+  .catch(error => {
+    console.error('Erreur lors de la communication avec le backend pour /selected_scenario:', error);
+  });
+}
+updateScenarios();
+// Appelez la fonction pour mettre à jour les scénarios au chargement de la page
+document.addEventListener('DOMContentLoaded', updateScenarios);
+
+
+    /*$('#folder_tree').jstree({
+      'core': {
+        'data': [
+          {
+            "text": "scenarios",
+            "state": { "opened": true },
+            "children": [
+              {
+                "text": "Scenario1",
+                "children": [
+                  { "text": "file1.py" },
+                  { "text": "file2.py" }
+                ]
+              },
+              { "text": "Scenario2" },
+              { "text": "Scenario3" }
+            ]
+          }
+        ]
+      }
+    });*/
+    // Établir une connexion WebSocket avec le serveur
+  const socket = io.connect('http://127.0.0.1:5000');  // Remplacez le domaine et le port appropriés
+
+  // Écouter l'événement 'message' du serveur
+  socket.on('message', function (data) {
+    // Traiter les données reçues du serveur
+    console.log('Received message:', data);
+
+    // Mettez à jour l'interface utilisateur avec les données reçues
+    updateUI(data);
+  });
+
+  // Fonction pour mettre à jour l'interface utilisateur avec les données reçues
+  function updateUI(data) {
+    // Remplacez cette partie avec votre logique d'affichage des données dans l'interface utilisateur
+    const consoleDiv = document.getElementById('console');
+    consoleDiv.innerHTML = `Topic: ${data.topic}<br>Payload: ${data.payload}<br>Timestamp: ${data.timestamp}`;
+  }
+
+  </script>
+</body>
+
+</html>

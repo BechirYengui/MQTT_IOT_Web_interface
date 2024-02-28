@@ -1,0 +1,152 @@
+[
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "0",
+        "receiving_time": "2023-12-13T17:02:58.995608"
+    },
+    {
+        "topic": "factory/vgr/wait_request",
+        "payload": "200",
+        "receiving_time": "2023-12-13T17:02:59.156403"
+    },
+    {
+        "topic": "factory/vgr/wait_request",
+        "payload": "200",
+        "receiving_time": "2023-12-13T17:02:59.536760"
+    },
+    {
+        "topic": "factory/vgr/wait_request",
+        "payload": "200",
+        "receiving_time": "2023-12-13T17:02:59.914068"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "reached",
+        "receiving_time": "2023-12-13T17:03:32.544799"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:03:37.412932"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "reached",
+        "receiving_time": "2023-12-13T17:03:40.107883"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:03:56.204549"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "reached",
+        "receiving_time": "2023-12-13T17:04:55.010420"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:04:59.888232"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "reached",
+        "receiving_time": "2023-12-13T17:05:02.580324"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:05:18.670718"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "reached",
+        "receiving_time": "2023-12-13T17:06:21.647279"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:06:35.934418"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "reached",
+        "receiving_time": "2023-12-13T17:06:36.278660"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:06:50.394720"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "reached",
+        "receiving_time": "2023-12-13T17:07:46.493215"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:08:02.352748"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "reached",
+        "receiving_time": "2023-12-13T17:08:06.472443"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:08:11.335456"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "reached",
+        "receiving_time": "2023-12-13T17:09:11.779285"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:09:26.035105"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "reached",
+        "receiving_time": "2023-12-13T17:09:30.491558"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:09:35.438103"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "reached",
+        "receiving_time": "2023-12-13T17:09:35.625104"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:09:40.510198"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "reached",
+        "receiving_time": "2023-12-13T17:10:39.105441"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:10:43.991579"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "reached",
+        "receiving_time": "2023-12-13T17:10:46.685612"
+    },
+    {
+        "topic": "factory/vgr/manager_notifier",
+        "payload": "done",
+        "receiving_time": "2023-12-13T17:11:02.788575"
+    }
+]

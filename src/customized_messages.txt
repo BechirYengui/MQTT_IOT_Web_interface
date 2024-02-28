@@ -1,0 +1,4 @@
+test-imt/color red
+test-imt/color blue
+test-imt/color white
+test-imt/position 1
